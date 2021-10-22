@@ -1,9 +1,22 @@
+import * as CryptoJS from "crypto-js";
+
 class Block {
     public index:number;
     public hash: string;
     public previousHash: string;
     public data: string;
     public timestamp: number;
+
+    //static method로써 클래스가 생성되지 않았어도 호출가능하다
+    static calculateBlockHash = (
+        index:number, 
+        previousHash:string, 
+        timestamp: number, 
+        data: string
+    ): string => 
+        CryptoJS.SHA256(index + previousHash + timestamp + data).toString(); 
+        
+
     constructor(
         index:number,
         hash: string,
@@ -21,15 +34,13 @@ class Block {
 
 const genesisBlock:Block = new Block(0, "2142342353580","", "Hello", 123456);
 
-// blockchain이라는 배열은 Block이라는 클래스타입을 가지고 
-// 거기에 genesisBlock이 가지고 있는 데이터를 넣을거다.
-let blockchain: [Block] = [genesisBlock];
+let blockchain: Block[] = [genesisBlock];
 
-console.log(blockchain);
+const getBlockchain = (): Block[] => blockchain;
 
-// typescript 덕분에 
-//blockchian.push("stuff"); 이렇게 해도 블록이 아니라서 블록체인에 푸쉬되지 않는다.
+const getLastestBlock = (): Block => blockchain[blockchain.length - 1];
 
+const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
 
 
 
