@@ -10,7 +10,6 @@ class Block {
         this.timestamp = timestamp;
     }
 }
-//static method로써 클래스가 생성되지 않았어도 호출가능하다
 Block.calculateBlockHash = (index, previousHash, timestamp, data) => CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
 Block.validateStructure = (aBlock) => typeof aBlock.index === "number" &&
     typeof aBlock.hash === "string" &&
@@ -28,6 +27,8 @@ const createNewBlock = (data) => {
     const newTimestamp = getNewTimeStamp();
     const newHash = Block.calculateBlockHash(newIndex, previousBlock.hash, newTimestamp, data);
     const newBlock = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
+    // addBlock을 여기에
+    addBlock(newBlock);
     return newBlock;
 };
 const getHashforBlock = (aBlock) => Block.calculateBlockHash(aBlock.index, aBlock.hash, aBlock.timestamp, aBlock.data);
@@ -54,4 +55,8 @@ const addBlock = (candidateBlock) => {
         blockchain.push(candidateBlock);
     }
 };
+createNewBlock("second block");
+createNewBlock("third block");
+createNewBlock("fourth block");
+console.log(blockchain);
 //# sourceMappingURL=index.js.map
